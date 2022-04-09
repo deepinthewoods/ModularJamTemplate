@@ -1,49 +1,45 @@
 package ninja.trek.entity;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
+import ninja.trek.entity.components.AnimationSelect;
+import ninja.trek.entity.components.Box2dAABB;
+import ninja.trek.entity.components.Box2dFloorContact;
+import ninja.trek.entity.components.Box2dPlatformerMovement;
+import ninja.trek.entity.components.CameraFollow;
+import ninja.trek.entity.components.InputData;
+import ninja.trek.entity.components.Inventory;
+import ninja.trek.entity.components.LayeredAnimation;
+import ninja.trek.entity.components.PlayerKeyboardInput;
 
-public class BasicEntity extends Entity{
-    static BodyDef bodyD;
-    static FixtureDef fixD;
-    static PolygonShape shape;
-    static float r = 1;
-    static Vector2[] verts = {
-            new Vector2(-r, r),
-            new Vector2(r, r),
-            new Vector2(-r, -r),
-            new Vector2(r, -r)
-    };
+public class BasicEntity extends Entity implements IFloorContact{
 
-    static {
-        bodyD = new BodyDef();
-        fixD = new FixtureDef();
-        shape = new PolygonShape();
-        shape.set(verts);
-        fixD.shape = shape;
-        bodyD.type = BodyDef.BodyType.DynamicBody;
-    }
-    @Override
-    public void onAdd(World world, float x, float y){
-        body = world.createBody(bodyD);
-        body.createFixture(fixD).setUserData(this);
-        body.setTransform(x, y, 0);
-        position.set(body.getPosition());
-    }
+    public Box2dAABB physics = new Box2dAABB();
+    public Box2dFloorContact floor = new Box2dFloorContact();
+    public IEntity  animSelect = new AnimationSelect("player")
+
+    ;
+    public Box2dPlatformerMovement platformerMovement = new Box2dPlatformerMovement();
+    public CameraFollow camera = new CameraFollow();
+    Draw layeredSprite = new LayeredAnimation();
+    InputData inputData = new InputData();
+    Inventory inventory = new Inventory();
+
     public BasicEntity(){
-        super();
+        updates = new IEntity[]{platformerMovement, physics, floor, animSelect, camera};
+        draw = new Draw[]{layeredSprite};
+        setConnections();
     }
 
-    float timeTarget = MathUtils.random(2f);
     @Override
-    public void update(float delta, World world) {
-        super.update(delta, world);
-        Gdx.app.log("entity ", "update " + time);
-//        if (time > timeTarget ) markedForRemoval = true;
+    public void setConnections() {
+        animSelect.set(layeredSprite, physics, platformerMovement, inputData, inventory);
+        layeredSprite.set(physics);
+        platformerMovement.set(floor, physics, animSelect, inputData);
+        camera.set(physics, floor);
+    }
+
+
+    @Override
+    public Box2dFloorContact getFloor() {
+        return (Box2dFloorContact) floor;
     }
 }

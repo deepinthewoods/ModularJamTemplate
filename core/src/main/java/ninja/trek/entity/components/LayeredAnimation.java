@@ -10,7 +10,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import ninja.trek.Graphics;
 import ninja.trek.entity.Draw;
 
-public class LayeredSprite extends Draw {
+public class LayeredAnimation extends Draw {
     private transient Animation<Sprite> anim;
     private float animTime;
     private transient Box2dAABB physics;

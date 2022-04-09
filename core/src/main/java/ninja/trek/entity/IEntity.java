@@ -2,12 +2,15 @@ package ninja.trek.entity;
 
 import com.badlogic.gdx.physics.box2d.World;
 
-public interface IPhysics {
-    void reset();
+public abstract class IEntity {
 
-    void update();
+    public void set(Object... other){};
 
-    void onRemove(World world);
+    public void reset(){};
 
-    void onAdd(World world, float x, float y);
+    public void update(float delta, World world){};
+
+    public void onRemove(World world){};
+
+    public void onAdd(World world, float x, float y, Entity parent){};
 }

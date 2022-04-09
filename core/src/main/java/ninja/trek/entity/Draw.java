@@ -2,11 +2,20 @@ package ninja.trek.entity;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 
 public abstract class Draw {
-    abstract void render(float delta, SpriteBatch batch);
+    public void set(Object... other){};
 
-    abstract void renderFilled(float delta, ShapeRenderer shape);
+    public void render(float delta, SpriteBatch batch){};
 
-    abstract void renderLine(float delta, ShapeRenderer shape);
+    public void renderFilled(float delta, ShapeRenderer shape){};
+
+    public void renderLine(float delta, ShapeRenderer shape){};
+
+    public void update(float delta, World world){};
+
+    public void reset() {
+
+    }
 }

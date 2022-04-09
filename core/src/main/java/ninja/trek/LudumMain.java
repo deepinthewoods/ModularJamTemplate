@@ -14,9 +14,9 @@ public class LudumMain extends Game {
 
     @Override
     public void create() {
+        skin = new Skin(Gdx.files.internal("skin.json"));
         gameScreen = new GameScreen(skin, this);
         menuScreen = new MenuScreen(skin, this);
-        skin = new Skin(Gdx.files.internal("skin.json"));
 
         setScreen(gameScreen);
 //        setScreen(menuScreen);
